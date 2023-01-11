@@ -51,10 +51,13 @@ get_docker_secret PMA_CONTROLHOST
 get_docker_secret PMA_CONTROLUSER
 get_docker_secret PMA_CONTROLPASS
 
-if  [-d /var/www/pma-static]; then
+# Statics assests must be copied through to the host via bind mount
+# Do ensure your bind mount to TARGET here in the container is rw enabled
+TARGET=/var/www/pma-statics
+if  [ -d $TARGET ]; then
     echo "Linking statics where a Docker host instance of a proxy server (eg Nginx) can reach them"
-    ln -nfs /var/www/html/js /var/www/pma-statics/js
-    ln -nfs /var/www/html/themes /var/www/pma-statics/themes
+    cp -R /var/www/html/js $TARGET/
+    cp -R /var/www/html/themes $TARGET/
 fi
 
 exec "$@"
