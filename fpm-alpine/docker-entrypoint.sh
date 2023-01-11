@@ -51,4 +51,10 @@ get_docker_secret PMA_CONTROLHOST
 get_docker_secret PMA_CONTROLUSER
 get_docker_secret PMA_CONTROLPASS
 
+if  [-d /var/www/pma-static]; then
+    echo "Linking statics where a Docker host instance of a proxy server (eg Nginx) can reach them"
+    ln -nfs /var/www/html/js /var/www/pma-statics/js
+    ln -nfs /var/www/html/themes /var/www/pma-statics/themes
+fi
+
 exec "$@"
